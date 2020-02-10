@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kurs React - Tydzien 2</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        .app {
+            font-family: sans-serif;
+        }
+        .timeboxEditor {
+            text-align: right;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        input {
+            min-width: 60%;
+            margin-left: 20px;
+            font-size: 16px;
+        }
+        button {
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        .timebox {
+            border: 1px solid gray;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+        }
+        .clock {
+            color: orangered;
+        }
+
+        /*.progressBar {*/
+        /*    border: 1px solid orangered;*/
+        /*    border-radius: 5px;*/
+        /*    display: flex;*/
+        /*    height: 25px;*/
+        /*    justify-content: flex-end;*/
+        /*    margin-bottom: 20px;*/
+        /*    padding: 6px;*/
+        /*}*/
+
+        /*.progressBar::after {*/
+        /*    content: '';*/
+        /*    background: orangered;*/
+        /*    height: 100%;*/
+        /*    line-height: 1.8rem;*/
+        /*    width: var(--width);*/
+        /*}*/
+
+        .inactive {
+            filter: blur(2px) grayscale(1);
+        }
+        .progressBar2 {
+            border: 1px solid orangered;
+            border-radius: 5px;
+            height: 25px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Kurs Reacta - tydzien 1</h1>
+        <hr>
+        <div class="app">
+            <div class="timeboxEditor inactive">
+                <label>Co robisz? <input disabled value="Ucze się skrótów klawiszowych" type="text"></label>
+                </br>
+                <label>Ile minut? <input disabled value="25" type="number"></label>
+                </br>
+                <button disabled>Zacznij</button>
+            </div>
+            <div class="timebox">
+                <h2>Ucze sie skrotow klawiszowych</h2>
+                <h2 class="clock">Pozostalo 13:28</h2>
+                <div class="progressBar" style="--width: 50%"></div>
+                <div class="progressBar2" style="background: linear-gradient(to right, white 10%, orangered 0%) content-box"></div>
+                <button disabled >Start</button>
+                <button>Stop</button>
+                <button>Pauza</button>Liczba przerw: 2
+            </div>
+        </div>
+    </div>
+    <div id="root">
+    </div>
+</body>
+<script type="text/babel">
+
+    const createElement = (props) => {
+      const element = document.createElement(props.tag);
+      if (props.className) {
+        element.className = props.className;
+      }
+      if (props.textContent) {
+        element.textContent = props.textContent;
+      }
+
+      if (props.style) {
+        element.style = props.style
+        if (props.style.background) {
+          element.style.background = props.style.background;
+        }
+      }
+
+      if (props.type) {
+        element.type = props.type;
+      }
+
+      if (props.value) {
+        element.value = props.value;
+      }
+
+      if (props.disabled) {
+        element.disabled = props.disabled;
+      }
+
+      const childrens  = props.childrens;
+      if(childrens && childrens.length > 0) {
+        console.log('childrens:', childrens);
+        childrens.forEach(children => element.append(children));
+      }
+      console.log(element);
+      return element;
+    }
+
+    const createElementReact = (props) => {
+      const {tag, label, ...other} = props;
+      console.log({...other}, tag);
+      const element = !label
+        ? React.createElement(tag, {...other}) : React.createElement(tag, {...other}, label)
+      return element;
+    }
+
+    const rootElement = document.getElementById('root');
+    const container = document.getElementById('container');
+    const domElement = createElement({ tag: 'h2', className: 'clock', textContent: 'Pozostalo 10:20'});
+
+
+    const h1Root = createElement({ tag: 'h1', textContent: 'Kurs Reacta - tydzien 1'});
+    const hrTag = createElement({tag: 'hr'});
+    const brTag1 = createElement({tag: 'br'});
+    const brTag2 = createElement({tag: 'br'});
+
+    const timeboxEditorInt1 = createElement({tag: 'input', value: 'Ucze się skrótów klawiszowych', disabled: true})
+    const timeboxEditorLbl1 = createElement({tag: 'label', textContent: 'Co robisz?', childrens: [timeboxEditorInt1]});
+    const timeboxEditorInt2 = createElement({tag: 'input', value: '25', disabled: true});
+    const timeboxEditorLbl2 = createElement({tag: 'label', textContent: 'Ile minut?', childrens: [timeboxEditorInt2]});
+    const timeboxEditorBtn = createElement({tag: 'button', textContent: 'Zacznij', disabled: true});
+    const timeboxEditor = createElement({
+      tag: 'div',
+      className: 'timeboxEditor inactive',
+      childrens: [timeboxEditorLbl1, brTag1, timeboxEditorLbl2, brTag2, timeboxEditorBtn]
+    });
+    const h2Timebox1 = createElement({tag: 'h2', textContent: 'Ucze sie skrotow klawiszowych'});
+    const h2Timebox2 = createElement({tag: 'h2', className: 'clock', textContent: 'Pozostalo 13:28'});
+    const progressBar = createElement({tag: 'div', className: 'progressBar', style: '--width: 50%'})
+    const progressBar2 = createElement({tag: 'div', className: 'progressBar2', style: { background: 'linear-gradient(to right, white 10%, orangered 0%) content-box'}})
+    const startBtn = createElement({tag: 'button', textContent: 'Start'});
+    const stopBtn = createElement({tag: 'button', textContent: 'Stop'});
+    const pauseBtn = createElement({tag: 'button', textContent: 'Pauza'});
+    const timebox = createElement({
+      tag: 'div',
+      className: 'timebox',
+      childrens: [h2Timebox1, h2Timebox2, progressBar, progressBar2, startBtn, stopBtn, pauseBtn]
+    });
+
+    // const app = createElement({tag: 'div', className: 'app', childrens: [timeboxEditor, timebox]})
+    // container.append(h1Root);
+    // container.append(hrTag);
+    // container.append(app);
+
+
+    const h1RootReact = createElementReact({ tag: 'h1', children: 'Kurs Reacta - tydzien 1'});
+    const hrTagReact = createElementReact({tag: 'hr'});
+    const brTag1React = createElementReact({tag: 'br'});
+    const brTag2React = createElementReact({tag: 'br'});
+
+    const timeboxEditor1IntReact = createElementReact({tag: 'input', placeholder: 'Ucze się skrótów klawiszowych', disabled: true})
+    const timeboxEditor1LblReact = createElementReact({tag: 'label', children: {}, label: ['Co robisz?', timeboxEditor1IntReact]});
+    const timeboxEditor2IntReact = createElementReact({tag: 'input', placeholder: '25', disabled: true, id: 'timeboxEditor2'});
+    const timeboxEditor2LblReact = createElementReact({tag: 'label', children: {}, label: ['Ile minut?', timeboxEditor2IntReact]});
+    const timeboxEditorBtnReact = createElementReact({tag: 'button', children: 'Zacznij', disabled: true});
+    const timeboxEditorReact = createElementReact({
+      tag: 'div',
+      className: 'timeboxEditor inactive',
+      children: [timeboxEditor1LblReact, brTag1React, timeboxEditor2LblReact, brTag2React, timeboxEditorBtnReact]
+    });
+    const h2Timebox1React = (<h2>Ucze sie skrotow klawiszowych</h2>);
+    function Clock({hours = 13, minutes = 20, seconds = 48, miliseconds = 1}) {
+      const validHours = hours > 23 ? 23 : hours;
+      const validMinutes = minutes > 59 ? 59 : minutes;
+      const validSeconds = seconds > 59 ? 59 : seconds;
+      const validMiliseconds = miliseconds > 999 ? 999 : miliseconds;
+      const convertTime = element =>  element < 0 ? `00` : element < 10 ? `0${element}` : `${element}`;
+      const convertMiliseconds = element =>  element < 0 ? `00` : element < 10 ? `00${element}` : element < 100 ? `0${element}` : `${element}`;
+      return <h2 className="clock">Pozostalo {convertTime(validHours)}:{convertTime(validMinutes)}:{convertTime(validSeconds)}:{convertMiliseconds(validMiliseconds)}</h2>
+    }
+    const h2Timebox2React = (<Clock hours={72} minutes={60} seconds={100} miliseconds={-1}/>)
+    const progressBarReact = createElementReact({tag: 'div', className: 'progressBar', style: '--width: 50%'})
+    const progressBar2React = createElementReact({tag: 'div', className: 'progressBar2', style: { background: 'linear-gradient(to right, white 10%, orangered 0%) content-box'}})
+    const startBtnReact = createElementReact({tag: 'button', label: 'Start',  disabled: true});
+    const stopBtnReact = createElementReact({tag: 'button', label: 'Stop'});
+    const pauseBtnReact = createElementReact({tag: 'button', label: 'Pauza'});
+    const timeboxReact = createElementReact({
+      tag: 'div',
+      className: 'timebox',
+      children: [h2Timebox1React, h2Timebox2React, progressBar2React, startBtnReact, stopBtnReact, pauseBtnReact, 'Liczba przerw: 2']
+    });
+
+    const appReact = createElementReact({tag: 'div', className: 'app', children: [timeboxEditorReact, timeboxReact]})
+
+    ReactDOM.render([h1RootReact, hrTagReact, appReact], rootElement)
+</script>
+</html>
